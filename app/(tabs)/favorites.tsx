@@ -2,11 +2,11 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Palette } from '@/constants/theme';
 
-export default function HomeScreen() {
+export default function FavoritesScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>SMDpreppers</Text>
-      <Text style={styles.subtitle}>Home screen coming soon</Text>
+      <Text style={styles.title}>Favorites</Text>
+      <Text style={styles.subtitle}>Favorites screen coming soon</Text>
     </View>
   );
 }
