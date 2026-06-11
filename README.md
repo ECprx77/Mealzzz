@@ -1,50 +1,44 @@
-# Welcome to your Expo app 👋
+# SMDpreppers
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A fierce, jungle-themed recipe app built with React Native (Expo) and powered by [TheMealDB](https://www.themealdb.com/api.php).
+
+## Features
+
+- Recipe search (single letter = starts with, 2+ characters = contains)
+- Filter by category, random recipe button
+- Recipe detail: image, ingredients, instructions, YouTube video link
+- Favorites, persisted across restarts (works offline)
+- Loading / error / empty states everywhere
+- Dark jungle theme, staggered entrance animations
+
+## Stack
+
+- **Expo / React Native** with [expo-router](https://docs.expo.dev/router/introduction) (bottom tab navigation: Home / Favorites)
+- **Redux Toolkit** (`createSlice`, `configureStore`, async thunks) for all shared state
+- **redux-persist** + AsyncStorage for favorites
+- **react-native-reanimated** for animations
+- Functional components + hooks only; all network access isolated in `api/`
+
+## Project structure
+
+```
+api/        TheMealDB client (the only place doing fetch)
+store/      Redux store, recipesSlice (with search cache), favoritesSlice
+app/        expo-router screens: (tabs)/index, (tabs)/favorites, recipe/[id]
+components/ Reusable UI (RecipeCard, ...)
+constants/  Jungle theme palette
+```
 
 ## Get started
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
 ```bash
-npm run reset-project
+bun install
+bunx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Then open the app in Expo Go (or an emulator) from the QR code / menu.
 
-## Learn more
+## Notes
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- The recipes search/category/detail caches live in Redux memory: repeating a search or reopening a recipe does not hit the network again.
+- Only the favorites slice is persisted; favorited recipes are stored in full so their detail screen works without a connection.
