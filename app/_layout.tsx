@@ -47,6 +47,10 @@ export default function RootLayout() {
         <ThemeProvider value={JungleTheme}>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="recipe/[id]"
+              options={{ title: 'Recipe', headerTintColor: Palette.primary }}
+            />
           </Stack>
           <StatusBar style="light" />
         </ThemeProvider>
