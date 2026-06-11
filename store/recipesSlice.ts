@@ -5,7 +5,7 @@ import {
   getMealById,
   getRandomMeal,
   listCategories,
-  searchMealsByName,
+  searchMeals as searchMealsApi,
   type Category,
   type Meal,
   type MealSummary,
@@ -55,7 +55,7 @@ export const searchMeals = createAsyncThunk<
   if (cached) {
     return { query: key, meals: cached };
   }
-  const meals = await searchMealsByName(key);
+  const meals = await searchMealsApi(key);
   return { query: key, meals };
 });
 
