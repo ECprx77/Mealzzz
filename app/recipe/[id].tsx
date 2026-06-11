@@ -8,6 +8,7 @@ import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { getIngredients } from '@/api/mealdb';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Palette } from '@/constants/theme';
+import { selectFavoriteById, selectIsFavorite, toggleFavorite } from '@/store/favoritesSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   fetchMealById,
@@ -20,13 +21,24 @@ export default function RecipeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
-  const meal = useAppSelector(selectMealById(id));
+  // Favorited meals are stored in full, so they keep working without network.
+  const cachedMeal = useAppSelector(selectMealById(id));
+  const favoriteMeal = useAppSelector(selectFavoriteById(id));
+  const meal = cachedMeal ?? favoriteMeal;
+
+  const isFavorite = useAppSelector(selectIsFavorite(id));
   const status = useAppSelector(selectDetailStatus);
   const error = useAppSelector(selectDetailError);
 
   useEffect(() => {
     dispatch(fetchMealById(id));
   }, [dispatch, id]);
+
+  const onToggleFavorite = useCallback(() => {
+    if (meal) {
+      dispatch(toggleFavorite(meal));
+    }
+  }, [dispatch, meal]);
 
   const openVideo = useCallback(() => {
     if (meal?.strYoutube) {
@@ -62,7 +74,20 @@ export default function RecipeDetailScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Stack.Screen options={{ title: meal.strMeal }} />
+      <Stack.Screen
+        options={{
+          title: meal.strMeal,
+          headerRight: () => (
+            <Pressable onPress={onToggleFavorite} hitSlop={12}>
+              <IconSymbol
+                size={26}
+                name={isFavorite ? 'heart.fill' : 'heart'}
+                color={isFavorite ? Palette.accent : Palette.textMuted}
+              />
+            </Pressable>
+          ),
+        }}
+      />
 
       <Animated.View entering={FadeIn.duration(400)}>
         <Image

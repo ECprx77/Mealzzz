@@ -32,5 +32,7 @@ export const { toggleFavorite } = favoritesSlice.actions;
 export const selectFavorites = (state: RootState) => state.favorites.items;
 export const selectIsFavorite = (id: string) => (state: RootState) =>
   state.favorites.items.some((meal) => meal.idMeal === id);
+export const selectFavoriteById = (id: string) => (state: RootState) =>
+  state.favorites.items.find((meal) => meal.idMeal === id);
 
 export default favoritesSlice.reducer;
